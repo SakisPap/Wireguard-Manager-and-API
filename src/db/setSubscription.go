@@ -12,8 +12,7 @@ func SetSubscription(keyID string, bwLimit int64, subExpiry string, bwReset bool
 	var subStructModify Subscription
 	db := DBSystem
 	responseMap := make(map[string]string)
-	keyIDInt, _ := strconv.Atoi(keyID) //convert to int
-	resultSub := db.Where("key_id = ?", keyIDInt).First(&subStructModify)
+	resultSub := db.Where("key_id = ?", keyID).First(&subStructModify)
 	if resultSub.Error != nil {
 		log.Println("Error - Finding subscription in db", resultSub.Error)
 		responseMap["response"] = "Error - Finding subscription"
@@ -34,7 +33,7 @@ func SetSubscription(keyID string, bwLimit int64, subExpiry string, bwReset bool
 	if bwReset {
 		subStructModify.BandwidthUsed = 0
 	}
-	db.Where("key_id = ?", keyIDInt).Save(&subStructModify)
+	db.Where("key_id = ?", keyID).Save(&subStructModify)
 	responseMap["response"] = "Updated successfully"
 	return true, responseMap
 }

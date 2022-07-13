@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateKey(pubKey string, preKey string, bwLimit int64, subEnd string, ipIndex int) (bool, map[string]string) {
+func CreateKey(pubKey string, preKey string, bwLimit int64, subEnd string, ipIndex int, keyId string) (bool, map[string]string) {
 	var ipStruct IP
 	var wgStruct WireguardInterface
 	responseMap := make(map[string]string)
@@ -38,7 +38,7 @@ func CreateKey(pubKey string, preKey string, bwLimit int64, subEnd string, ipInd
 		return false, responseMap
 	}
 
-	keyStructCreate := Key{PublicKey: pubKey, PresharedKey: preKey, IPv4Address: ipStruct.IPv4Address, Enabled: "true"} //create Key object
+	keyStructCreate := Key{PublicKey: pubKey, PresharedKey: preKey, IPv4Address: ipStruct.IPv4Address, Enabled: "true", KeyID: keyId} //create Key object
 	resultKeyCreate := db.Create(&keyStructCreate)                                                                      //add object to db
 	if resultKeyCreate.Error != nil {
 		log.Println("Error - Adding key to db", resultKeyCreate.Error)
@@ -47,7 +47,6 @@ func CreateKey(pubKey string, preKey string, bwLimit int64, subEnd string, ipInd
 	}
 	ipStruct.InUse = "true"                         //set ip to in use
 	db.Save(&ipStruct)                              //update IP in db
-	keyIDStr := strconv.Itoa(keyStructCreate.KeyID) //convert keyID to string
 
 	subStructCreate := Subscription{KeyID: keyStructCreate.KeyID, PublicKey: pubKey, BandwidthUsed: 0, BandwidthAllotted: bwLimit, SubscriptionEnd: subEnd}
 	resultSub := db.Create(&subStructCreate)
@@ -71,7 +70,7 @@ func CreateKey(pubKey string, preKey string, bwLimit int64, subEnd string, ipInd
 		responseMap["ipAddress"] = ipSelected
 		responseMap["dns"] = viper.GetString("INSTANCE.IP.GLOBAL.DNS")
 		responseMap["allowedIPs"] = viper.GetString("INSTANCE.IP.GLOBAL.ALLOWED")
-		responseMap["keyID"] = keyIDStr
+		responseMap["keyID"] = keyStructCreate.KeyID
 	}
 
 	resultWG := db.Where("interface_name = ?", "wg0").First(&wgStruct) //get wireguard server info

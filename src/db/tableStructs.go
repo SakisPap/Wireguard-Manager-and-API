@@ -1,7 +1,7 @@
 package db
 
 type Key struct {
-	KeyID        int    `gorm:"primaryKey;autoIncrement"`
+	KeyID        string `gorm:"primaryKey"`
 	PublicKey    string `gorm:"unique"`
 	PresharedKey string `gorm:"unique"`
 	IPv4Address  string `gorm:"foreignKey:IPv4Address"`
@@ -22,7 +22,7 @@ type WireguardInterface struct {
 	IPv6Address   string
 }
 type Subscription struct {
-	KeyID             int    `gorm:"foreignKey:KeyID"`
+	KeyID             string `gorm:"foreignKey:KeyID"`
 	PublicKey         string `gorm:"foreignKey:PublicKey"`
 	BandwidthUsed     int64
 	BandwidthAllotted int64

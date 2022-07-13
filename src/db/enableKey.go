@@ -14,8 +14,7 @@ func EnableKey(keyID string) (bool, map[string]string) {
 	responseMap := make(map[string]string)
 	db := DBSystem
 
-	keyIDInt, _ := strconv.Atoi(keyID)                              //convert key string to int
-	resultKey := db.Where("key_id = ?", keyIDInt).First(&keyStruct) //find key in database
+	resultKey := db.Where("key_id = ?", keyID).First(&keyStruct) //find key in database
 	if errors.Is(resultKey.Error, gorm.ErrRecordNotFound) {
 		responseMap["response"] = "Key was not found on the server"
 		return false, responseMap
