@@ -3,7 +3,6 @@ package db
 import (
 	"errors"
 	"log"
-	"strconv"
 	"time"
 
 	"gitlab.com/raspberry.tech/wireguard-manager-and-api/src/logger"
@@ -64,8 +63,8 @@ func BWPeerCheck() bool {
 			}
 			if (bwStoredUsage+(bwCurrent/1000000) > bwLimit || currentTime.After(subFormatted)) && bwLimit != 0 {
 				keyID := subStruct.KeyID
-				updatePeerBW(currentPeer)       //update bandwidth before disabling
-				DisableKey(strconv.Itoa(keyID)) //disable key if bandwidth limit reached or subscription end#
+				updatePeerBW(currentPeer) //update bandwidth before disabling
+				DisableKey(keyID)         //disable key if bandwidth limit reached or subscription end#
 				log.Println("Info - Disabling key, bw or sub has ended, KeyID: ", keyID)
 			}
 		}

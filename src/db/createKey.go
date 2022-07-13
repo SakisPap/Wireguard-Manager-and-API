@@ -39,14 +39,14 @@ func CreateKey(pubKey string, preKey string, bwLimit int64, subEnd string, ipInd
 	}
 
 	keyStructCreate := Key{PublicKey: pubKey, PresharedKey: preKey, IPv4Address: ipStruct.IPv4Address, Enabled: "true", KeyID: keyId} //create Key object
-	resultKeyCreate := db.Create(&keyStructCreate)                                                                      //add object to db
+	resultKeyCreate := db.Create(&keyStructCreate)                                                                                    //add object to db
 	if resultKeyCreate.Error != nil {
 		log.Println("Error - Adding key to db", resultKeyCreate.Error)
 		responseMap["response"] = "Error when adding key to database"
 		return false, responseMap
 	}
-	ipStruct.InUse = "true"                         //set ip to in use
-	db.Save(&ipStruct)                              //update IP in db
+	ipStruct.InUse = "true" //set ip to in use
+	db.Save(&ipStruct)      //update IP in db
 
 	subStructCreate := Subscription{KeyID: keyStructCreate.KeyID, PublicKey: pubKey, BandwidthUsed: 0, BandwidthAllotted: bwLimit, SubscriptionEnd: subEnd}
 	resultSub := db.Create(&subStructCreate)

@@ -2,7 +2,6 @@ package db
 
 import (
 	"errors"
-	"strconv"
 
 	"gitlab.com/raspberry.tech/wireguard-manager-and-api/src/manager"
 	"gorm.io/gorm"

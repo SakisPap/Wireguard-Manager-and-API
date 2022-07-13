@@ -2,7 +2,6 @@ package db
 
 import (
 	"log"
-	"strconv"
 	"time"
 
 	"gitlab.com/raspberry.tech/wireguard-manager-and-api/src/logger"

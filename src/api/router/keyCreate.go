@@ -12,8 +12,8 @@ type keyCreateJSON struct {
 	PresharedKey string `json:"presharedKey"`
 	BWLimit      int64  `json:"bwLimit"`
 	SubExpiry    string `json:"subExpiry"`
-	IPIndex      int    `json:"ipIndex"`,
-	KeyID		 string `json:"keyId"`
+	IPIndex      int    `json:"ipIndex"`
+	KeyID        string `json:"keyId"`
 }
 
 func keyCreate(res http.ResponseWriter, req *http.Request) {
